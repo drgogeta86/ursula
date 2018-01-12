@@ -75,11 +75,10 @@
 
 - name: install shade bits for ansible modules in base venv
   pip:
-    name: "{{ item }}"
+    name: "shade"
     virtualenv: "{{ common.python.base_venv }}"
     extra_args: "{{ pip_extra_args }}"
-  with_items:
-    - "{{ common.python.shade_version }}"
+    version: "{{ common.python.shade_version }}"
   register: result
   until: result|succeeded
   retries: 5

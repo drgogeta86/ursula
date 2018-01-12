@@ -24,6 +24,7 @@
   until: result|succeeded
   retries: 5
 
+
 - block:
   - name: enable apache modules
     apache2_module: name={{ item }}
@@ -31,8 +32,20 @@
       - headers
       - ssl
       - rewrite
-      - uwsgi
       - proxy
+    notify: reload apache
+
+  - name: install apache module packages
+    package: name={{ item }}
+    with_items: "{{ apache.modules.ubuntu2 }}"
+    register: result
+    until: result|succeeded
+    retries: 5
+
+  - name: enable the rest of apache modules
+    apache2_module: name={{ item }}
+    with_items:
+      - uwsgi
       - proxy_http
       - proxy_uwsgi
     notify: reload apache

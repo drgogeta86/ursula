@@ -16,7 +16,7 @@
                     insecure={{ insecure|default(omit) }}
   with_items: "{{ keystone.services }}"
   when:
-    - ({{item.name}}.enabled is undefined or {{item.name}}.enabled|bool)
+    - item.name.enabled|default(True)
     - item.name not in ['cinder','cinderv2','cinderv3']
   run_once: true
   register: services_setup
